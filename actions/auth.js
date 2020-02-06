@@ -3,6 +3,7 @@ import cookie from 'js-cookie';
 import { API } from '../config';
 import Router from 'next/router';
 
+// TODO: pendiente refactorizar acciones hacia Redux
 // Bug sección #18
 // export const handleResponse = response => {
 //     if (response.status === 401) {
