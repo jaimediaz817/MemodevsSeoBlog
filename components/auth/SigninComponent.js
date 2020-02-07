@@ -13,8 +13,8 @@ const SigninComponent = () => {
 
     // ESTADOS
     const [values, setValues] = useState({
-        email: 'jaimeivan0017@gmail.com',
-        password: '123456',
+        email: '',
+        password: '',
         error: '',
         loading: false,
         message: '',

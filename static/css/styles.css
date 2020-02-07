@@ -94,3 +94,29 @@
         16px 16px rgba(0, 0, 0, 0.04), 17px 17px rgba(0, 0, 0, 0.04), 18px 18px rgba(0, 0, 0, 0.04),
         19px 19px rgba(0, 0, 0, 0.04), 1.25rem 1.25rem rgba(0, 0, 0, 0.04);
 }
+
+/* single-loader-v1 */
+.text-center.single-loader-container::before {
+    content: "";
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 98;
+    background:
+    rgba(255, 255, 255, 0.6);
+    transition: all ease-in;    
+
+}
+.single-loader-v1 {
+    z-index: 99;
+    /* content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    right: 0;
+    border: 3px solid red; */
+}
+/* ................ */

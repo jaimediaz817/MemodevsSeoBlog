@@ -10,6 +10,8 @@ import { createBlog } from './../../actions/blog';
 const ReactQuill =  dynamic(() => import('react-quill'), {ssr: false})
 import '../../node_modules/react-quill/dist/quill.snow.css';
 import { QuillModules, QuillFormats } from '../../helpers/quill';
+// Helpers components
+import SingleLoader from './../loaders/SingleLoader';
 
 const CreateBlog = ({ router }) => {
 
@@ -41,10 +43,11 @@ const CreateBlog = ({ router }) => {
         success: '',
         formData: '',
         title: '',
-        hidePublishButton: false
+        hidePublishButton: false,
+        loading: false
     });
 
-    const { error, sizeError, success, formData, title, hidePublishButton } = values;
+    const { error, sizeError, success, formData, title, hidePublishButton, loading } = values;
     const token = getCookie('token');
 
     useEffect(()=>{
@@ -82,6 +85,8 @@ const CreateBlog = ({ router }) => {
 
     // Crear BLOG
     const publishBlog = (e) => {
+        // refactor:
+        setValues({ ...values, loading: true});
         e.preventDefault();
         console.log('ready to publish');
         createBlog(formData, token).then(data => {
@@ -93,6 +98,7 @@ const CreateBlog = ({ router }) => {
             } else {
                 setValues({
                     ...values,
+                    loading: false,
                     title: '',
                     error: '',
                     success: `Blog creado correctamente con el título: "${data.title}" en la base de datos`                    
@@ -191,13 +197,18 @@ const CreateBlog = ({ router }) => {
         <div className="alert alert-danger" style={{ display: error ? '' : 'none' }}>
             { error }
         </div>
-    )
+    );
 
     const showSuccess = () => (
         <div className="alert alert-success" style={{ display: success ? '' : 'none' }}>
             { success }
         </div>
-    )    
+    );
+
+    // TODO: provisional
+    const showLoading = () => (
+        <SingleLoader loading={loading} withText={true} />
+    );
 
     const createBlogForm = () =>{
         return (
@@ -233,6 +244,7 @@ const CreateBlog = ({ router }) => {
                     <div className="pb-3">
                         { showError() }
                         { showSuccess() }
+                        { showLoading() }
                     </div>
                 </div>
 
