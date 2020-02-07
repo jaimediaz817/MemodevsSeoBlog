@@ -7,8 +7,22 @@ import { API } from '../../config';
 
 const ProfileUpdate = () => {
 
+    // TODO: se quita el emial del formulario
+    /*
+            <div className="form-group">
+                <label className="text-muted">Email</label>
+                <input 
+                    type="email"
+                    value={email}
+                    className="form-control"
+                    onChange={ handleChange('email') }
+                />
+            </div>         
+    */
+
     const [values, setValues] = useState({
         username: '',
+        username_for_photo: '',
         name: '',
         email: '',
         about: '',
@@ -21,7 +35,7 @@ const ProfileUpdate = () => {
     });
 
     const token = getCookie('token');
-    const { username, name, email, about, password, error, success, loading, photo, userData} = values;
+    const { username, username_for_photo, name, email, about, password, error, success, loading, photo, userData} = values;
 
     const init = () => {
         getProfile(token).then(data=> {
@@ -31,6 +45,7 @@ const ProfileUpdate = () => {
                 setValues({
                     ...values,
                     username: data.username,
+                    username_for_photo: data.username,
                     name: data.name,
                     email: data.email,
                     about: data.about                    
@@ -43,6 +58,7 @@ const ProfileUpdate = () => {
 
     useEffect(()=>{
         init();
+        setValues({ ...values, userData: new FormData() });
     }, []);
 
     // UI ---------------------------------
@@ -60,7 +76,8 @@ const ProfileUpdate = () => {
         setValues({
             ...values,
             loading: true
-        })
+        });
+
         updateProfile(token, userData).then(data => {
             if (data.error) {
                 setValues({
@@ -116,16 +133,7 @@ const ProfileUpdate = () => {
                     onChange={ handleChange('name') }
                 />
             </div>            
-
-            <div className="form-group">
-                <label className="text-muted">Email</label>
-                <input 
-                    type="email"
-                    value={email}
-                    className="form-control"
-                    onChange={ handleChange('email') }
-                />
-            </div>                        
+                                
 
             <div className="form-group">
                 <label className="text-muted">Sobre el usuario</label>
@@ -145,7 +153,13 @@ const ProfileUpdate = () => {
                     className="form-control"
                     onChange={ handleChange('password') }
                 />
-            </div>             
+            </div>  
+            
+            <div>
+                { showSuccess() }
+                { showError() }
+                { showLoading() }
+            </div>
 
             <div>
                 <button className="btn btn-primary" type="submit">
@@ -186,16 +200,16 @@ const ProfileUpdate = () => {
                 <div className="row">
                     <div className="col-md-4">   
                         <img 
-                            src={`${API}/user/photo/${username}`}
+                            src={`${API}/user/photo/${username_for_photo}`}
                             className="img img-fluid img-thumbnail mb-3"
                             style={{ maxHeight: 'auto', maxWidth: '100%' }}
                             alt="Perfil del usuario (Foto/Avatar)"
                         />                      
                     </div>
                     <div className="col-md-8 mb-5">
-                    { showSuccess() }
-                    { showError() }
-                    { showLoading() }
+                    { /*showSuccess() */ }
+                    { /*showError() */ }
+                    { /*showLoading() */ }
                     { profileUpdateForm()}
                     </div>
                 </div>

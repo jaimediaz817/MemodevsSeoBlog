@@ -15,9 +15,7 @@ const UserIndex = () => {
                             <ul className="list-group">
 
                                 <li className="list-group-item">
-                                    <Link href="/user/crud/blog">
-                                        <a>Crear Blog</a>
-                                    </Link>
+                                    <a href="/user/crud/blog">Crear Blog</a>
                                 </li>
 
                                 <li className="list-group-item">
