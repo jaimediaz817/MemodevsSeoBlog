@@ -12,7 +12,7 @@ import Router from 'next/router';
 //             Router.push({
 //                 pathname: '/signin',
 //                 query: {
-//                     message: 'La sesión utilizada ha expirado en la plataforma, por favor inicie sesión nuevamente.'
+//                     message: 'La sesión utigitlizada ha expirado en la plataforma, por favor inicie sesión nuevamente.'
 //                 }
 //             });
 //         });

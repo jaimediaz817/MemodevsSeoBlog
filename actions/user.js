@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import { API } from '../config';
+import { handleResponse } from './auth';
 
 // CRUD
 export const userPublicProfile = (username) => {

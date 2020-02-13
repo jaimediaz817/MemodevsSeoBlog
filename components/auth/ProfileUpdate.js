@@ -34,6 +34,10 @@ const ProfileUpdate = () => {
         userData: ''
     });
 
+    const [selectedFile, setSelectedFile] = useState();
+    const [preview, setPreview] = useState();
+    const [currentAvatar, setCurrentAvatar] = useState('');
+
     const token = getCookie('token');
     const { username, username_for_photo, name, email, about, password, error, success, loading, photo, userData} = values;
 
@@ -49,7 +53,10 @@ const ProfileUpdate = () => {
                     name: data.name,
                     email: data.email,
                     about: data.about                    
-                });                
+                });       
+                
+                setCurrentAvatar(`${API}/user/photo/${data.username}`);
+                console.info("flujo de datos: ",)
             }
         }).catch(err=>{
             console.log(err)
@@ -61,11 +68,33 @@ const ProfileUpdate = () => {
         setValues({ ...values, userData: new FormData() });
     }, []);
 
+    useEffect(()=>{
+        console.log("hoock preview image");
+        if (!selectedFile) {
+            setPreview(undefined)
+            return
+        }
+        const objectUrl = URL.createObjectURL(selectedFile)
+        setPreview(objectUrl)
+
+        // free memory when ever this component is unmounted
+        return () => URL.revokeObjectURL(objectUrl)                
+    }, [selectedFile]);
+
     // UI ---------------------------------
     const handleChange = name => e => {
         console.log(e.target.value)
         // validando el origen del dato:
         const value = name === 'photo' ? e.target.files[0] : e.target.value;
+
+        if (!e.target.files || e.target.files.length === 0) {
+            setSelectedFile(undefined)
+            return
+        }
+
+        // I've kept this example simple by using the first image instead of multiple
+        setSelectedFile(e.target.files[0])
+
         let userFormData = new FormData();
         userFormData.set(name, value);
         setValues({...values, [name]: value, userData: userFormData, error: false, success: false})
@@ -88,7 +117,11 @@ const ProfileUpdate = () => {
                 })
             } else {
                 // set localStorage
+                const objectUrl = URL.createObjectURL(selectedFile)
+                setCurrentAvatar(objectUrl)
+                
                 updateUserProfile(data, () => {
+
                     setValues({
                         ...values,
                         username: data.username,
@@ -97,8 +130,10 @@ const ProfileUpdate = () => {
                         about: data.about,
                         success: true,
                         loading: false,
-                        error: false                
+                        error: false,                        
                     });  
+
+                    setPreview(undefined);
                 });                  
             }
         })        
@@ -107,11 +142,33 @@ const ProfileUpdate = () => {
 
     const profileUpdateForm = () => (
         <form onSubmit={ handleSubmit }>
-            <div className="form-group">
-                <small className="text-muted d-block">Tamaño máximo: 1 MB</small>
-                <label className="btn btn-outline-info">Foto de perfil
-                    <input onChange={ handleChange('photo')} type="file" accept="image/*" hidden/>
-                </label>                
+            <div className="form-row">
+                <div className="col-md-6">
+
+                <div className="form-group">
+                    <small className="text-muted d-block">Tamaño máximo: 1 MB</small>
+                    <label className="btn btn-outline-info">Foto de perfil
+                        <input 
+                            onChange={ handleChange('photo')} 
+                            type="file" 
+                            accept="image/*" hidden                            
+                        />
+                    </label>                
+                    </div>                
+                </div>
+                <div className="col-md-6">                    
+                    { preview &&  (
+                        <div className="form-group">
+                            <label className="text-muted float-left pr-3">Imagen previsualizada:</label>
+                            <img 
+                                className="img img-fluid img-thumbnail rounded  mb-3" 
+                                style={{ maxHeight: 'auto', maxWidth: '75px' }} 
+                                src={preview}  
+                                alt="Imagen preliminar"
+                            />
+                        </div>
+                    )}
+                </div>
             </div>
 
             <div className="form-group">
@@ -132,8 +189,7 @@ const ProfileUpdate = () => {
                     className="form-control"
                     onChange={ handleChange('name') }
                 />
-            </div>            
-                                
+            </div>
 
             <div className="form-group">
                 <label className="text-muted">Sobre el usuario</label>
@@ -200,7 +256,7 @@ const ProfileUpdate = () => {
                 <div className="row">
                     <div className="col-md-4">   
                         <img 
-                            src={`${API}/user/photo/${username_for_photo}`}
+                            src={`${currentAvatar}`}
                             className="img img-fluid img-thumbnail mb-3"
                             style={{ maxHeight: 'auto', maxWidth: '100%' }}
                             alt="Perfil del usuario (Foto/Avatar)"

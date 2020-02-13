@@ -80,9 +80,7 @@ const Category = () => {
             } else {
                 setValues({ ...values, error: false, success: !success, name: '', removed: false, reload: !reload });
             }
-        }).catch(err=>{
-            console.log("::::::::: error: ", err)
-        })
+        }).catch(err=> console.log("::::::::: error: ", err));
     };
  
     const handleChange = e => {
