@@ -1,8 +1,3 @@
-/**
- * FULL CODE CATEGORY
- * components/crud/Category.js
- */
- 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Router from 'next/router';
@@ -15,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faCheck,  faQuestion} from '@fortawesome/free-solid-svg-icons'
 import toaster from "toasted-notes";
 import "toasted-notes/src/styles.css"; // optional styles
-
+import SingleLoader from '../../components/loaders/SingleLoader';
 
 const SendEmailResponse = (props) => {
 
@@ -30,12 +25,13 @@ const SendEmailResponse = (props) => {
         namesUser: '',
         messageId: '',
         currentMessageId: '',
-        emailQuestionTo: ''
+        emailQuestionTo: '',
+        loading: false
     });
 
     const [question, setQuestion] = useState([]);    
  
-    const { subject, error, success, headerMessage, message, messageId, currentMessageId, reload, namesUser, emailQuestionTo } = values;
+    const { subject, error, success, headerMessage, message, messageId, currentMessageId, reload, namesUser, emailQuestionTo, loading } = values;
     const token = getCookie('token');
  
     useEffect(() => {
@@ -89,6 +85,11 @@ const SendEmailResponse = (props) => {
     // 
     const clickSubmit = e => {
         e.preventDefault();
+        setValues({
+            ...values,
+            loading: true,            
+        });
+
         console.log("values: ", values);
         // acciones: 
         sendEmailResponseAction({
@@ -106,7 +107,8 @@ const SendEmailResponse = (props) => {
                 setValues({
                     ...values,
                     success: true,
-                    message: ''
+                    message: '',
+                    loading: false
                 });
 
                 
@@ -121,6 +123,7 @@ const SendEmailResponse = (props) => {
             setValues({
                 ...values,
                 success: false,
+                loading: false,
                 error: err
             })
             // toaster.notify(response.message, {
@@ -167,6 +170,12 @@ const SendEmailResponse = (props) => {
             return <p className="text-danger">Hubo un error al enviar el correo</p>;
         }
     };
+
+    const showLoading = () => {
+        return (
+            <SingleLoader loading={loading} />
+        );        
+    }    
  
     const emailResponseForm = () => (
         <form onSubmit={clickSubmit} className="mt-4">
@@ -210,6 +219,7 @@ const SendEmailResponse = (props) => {
                     </div>
                 </div>
             </div>
+            { showLoading() }
         </React.Fragment>
     );
 };

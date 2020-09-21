@@ -42,13 +42,14 @@ const Blogs = ({ blogs, categories, tags, totalBlogs, blogsLimit, blogsSkip, siz
                 setLoadedBlogs([...loadedBlogs, ...data.blogs]);
                 setSizeBlogs(data.size);
                 setSkip(toSkip);
+                console.log("se cargaron mas..")
             }
         });
     }
 
-    const loadMoreButton = () => {
+    const loadMoreButton = () => {        
         return (
-            size > 0 && size >= limit && (<button onClick={loadMore} className="btn btn-outline-primary btn-lg">Cargar más</button>)
+            sizeBlogs > 0 && sizeBlogs >= limit && (<button onClick={loadMore} className="btn btn-outline-primary btn-lg">Cargar más</button>)
         );
     }
 
@@ -122,7 +123,8 @@ const Blogs = ({ blogs, categories, tags, totalBlogs, blogsLimit, blogsSkip, siz
                     </div>
                     <div className="text-center pt-5 pb-5">
                         { loadMoreButton() }
-                    </div>                                                                            
+                    </div>      
+                    cantidad: { size }                                                                      
                 </main>
             </Layout>
         </React.Fragment>

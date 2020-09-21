@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Layout from '../../../../components/Layout';
 import SendEmailResponse from '../../../../components/homepage/SendEmailResponse';
 import { withRouter } from 'next/router';
@@ -6,8 +6,22 @@ import 'moment/locale/es';
 
 const EmailResponseLP = ({ router }) => {
 
+    const [values, setValues] = useState({
+        namesUser: '',
+        messageId: '',
+        currentMessageId: ''
+    });    
 
+    useEffect(()=>{
+        setValues({
+            ...values, 
+            namesUser: router.query.username,
+            messageid: router.query.messageid,
+            currentMessageId: router.query.currentmessageid
+        }) 
+    },[]);
 
+    const { namesUser, messageid, currentMessageId } = values;
 
     return (
         <React.Fragment>
@@ -24,7 +38,9 @@ const EmailResponseLP = ({ router }) => {
                                     messageId={router.query.messageid}
                                     currentMessageId={router.query.currmessageid}
                                 />
-                                { /*JSON.stringify(router) */ }
+                                <div>
+                                index PADRE { JSON.stringify(router) }                                
+                                </div>                                
                             </div>
                         </div>
                     </div>

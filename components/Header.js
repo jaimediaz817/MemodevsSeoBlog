@@ -21,6 +21,8 @@ import NProgress from 'nprogress';
 import '.././node_modules/nprogress/nprogress.css';
 import Search from './blog/Search';
 
+
+
 // NPROGRESS
 Router.onRouteChangeStart = url => NProgress.start();
 Router.onRouteChangeComplete = url => NProgress.done();

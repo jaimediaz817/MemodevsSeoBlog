@@ -176,7 +176,7 @@ SingleBlog.getInitialProps = ({query}) => {
         } else {
             console.log('GET INITIAL PROPS IN SINGLE BLOG', data);
             return { blog: data, query }
-        }   
+        }
     })
 }
 
